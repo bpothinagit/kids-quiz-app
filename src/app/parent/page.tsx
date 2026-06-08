@@ -25,7 +25,7 @@ export default function ParentDashboard() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold">Study materials</h2>
           <p className="text-sm text-slate-500">
-            Upload curriculum text or Word docs, tag them with a subject, then generate practice
+            Upload curriculum text, Word docs, or PDFs, tag them with a subject, then generate practice
             questions from them.
           </p>
           <MaterialUploader kids={kids} materials={materials} />

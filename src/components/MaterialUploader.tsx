@@ -93,8 +93,8 @@ export default function MaterialUploader({ kids, materials }: { kids: Kid[]; mat
         <input
           ref={fileInput}
           type="file"
-          accept=".txt,.md,.markdown,.docx,text/plain,text/markdown,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-          className="block w-full text-sm"
+          accept=".txt,.md,.markdown,.docx,.pdf,text/plain,text/markdown,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf"
+          className="block w-full text-sm text-slate-600 file:mr-3 file:rounded-full file:border-0 file:bg-indigo-600 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-indigo-700"
         />
         <div className="flex flex-wrap gap-3">
           <input
@@ -132,7 +132,7 @@ export default function MaterialUploader({ kids, materials }: { kids: Kid[]; mat
         >
           Upload
         </button>
-        <p className="text-xs text-slate-400">Supported: .txt, .md, .docx</p>
+        <p className="text-xs text-slate-400">Supported: .txt, .md, .docx, .pdf</p>
       </form>
     </div>
   );
