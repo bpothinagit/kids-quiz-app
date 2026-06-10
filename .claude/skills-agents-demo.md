@@ -1,19 +1,23 @@
-# Claude Code: Custom Skills & Agents Demo Plan
+# Claude Code: Custom Commands & Agents Demo Plan
 
-This document describes 2 custom skills and 2 custom agents to build and demo
-within the kids-quiz-app codebase.
+This document describes 2 custom commands (slash commands) and 2 custom agents
+to build and demo within the kids-quiz-app codebase.
 
----
-
-## Custom Skills
-
-Skills are slash commands defined in `.claude/commands/` that automate
-repeatable developer tasks. They run inside the current Claude Code session
-with full tool access.
+> **Naming note:** Claude Code calls these *commands*, not skills. They live in
+> `.claude/commands/` and are invoked with a `/` prefix. "Skills" is sometimes
+> used informally but `.claude/commands/` is the actual folder the CLI reads.
 
 ---
 
-### Skill 1 — `/new-api-route`
+## Custom Commands (slash commands)
+
+Commands are markdown files in `.claude/commands/` that define repeatable
+slash-command tasks. Claude Code reads the file content as the prompt when
+you type `/<command-name>`, substituting `$ARGUMENTS` with whatever follows.
+
+---
+
+### Command 1 — `/new-api-route`
 
 **File:** `.claude/commands/new-api-route.md`
 
@@ -35,15 +39,15 @@ requires. Avoids the copy-paste boilerplate that every new route needs.
   construction example, matching the testing patterns in CLAUDE.md
 
 **Demo talking points:**
-- Shows skills eliminating project-specific boilerplate (not generic scaffolding)
-- The skill reads `CLAUDE.md` to apply the correct `params` pattern —
-  demonstrates that skills have full context of the repo
+- Shows commands eliminating project-specific boilerplate (not generic scaffolding)
+- The command reads `CLAUDE.md` to apply the correct `params` pattern —
+  demonstrates that commands have full context of the repo
 - Saves ~10 minutes per new route; prevents the `params` await bug that
   breaks every Next.js 16 route when forgotten
 
 ---
 
-### Skill 2 — `/validate-question-json`
+### Command 2 — `/validate-question-json`
 
 **File:** `.claude/commands/validate-question-json.md`
 
@@ -65,9 +69,9 @@ and reports pass/fail with field-level error messages in readable prose.
 **Demo talking points:**
 - Bridges the LLM-generated JSON → app import workflow that is core to the
   app's design (parents paste JSON from any LLM)
-- Skills can be domain tools, not just dev tools — a tech-savvy parent could
+- Commands can be domain tools, not just dev tools — a tech-savvy parent could
   run this before pasting into the UI
-- Demonstrates skills calling into real app logic (`questionSchema.ts`) rather
+- Demonstrates commands calling into real app logic (`questionSchema.ts`) rather
   than being standalone scripts
 
 ---
@@ -143,20 +147,21 @@ attempt history table.
 
 | Step | Task | Notes |
 |---|---|---|
-| 1 | Create `/validate-question-json` skill | Smallest scope; pure function test |
-| 2 | Create `/new-api-route` skill | Requires template authoring |
+| 1 | Create `/validate-question-json` command | Smallest scope; pure function test |
+| 2 | Create `/new-api-route` command | Requires template authoring |
 | 3 | Build `question-bank-reviewer` agent | Needs DB access + quality rubric prompt |
 | 4 | Build `progress-analyzer` agent | Needs `listAttemptsForKid` + trend logic |
 
-## Files to Create
+## Files Created
 
 ```
 .claude/
   commands/
-    validate-question-json.md    ← Skill 1 definition
-    new-api-route.md             ← Skill 2 definition
-src/
+    validate-question-json.md    ← Command 1 definition
+    new-api-route.md             ← Command 2 definition
   agents/
-    question-bank-reviewer.ts    ← Agent 1 entry point
-    progress-analyzer.ts         ← Agent 2 entry point
+    question-bank-reviewer.md   ← Agent 1 definition
+    progress-analyzer.md        ← Agent 2 definition
+scripts/
+  validate-question-json.mts    ← Helper called by Command 1
 ```
