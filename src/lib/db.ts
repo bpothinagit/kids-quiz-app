@@ -57,4 +57,16 @@ db.exec(`
   );
 `);
 
+try {
+  db.exec("ALTER TABLE kids ADD COLUMN avatar_emoji TEXT NOT NULL DEFAULT '🦊'");
+} catch {
+  // column already exists
+}
+
+try {
+  db.exec("ALTER TABLE quizzes ADD COLUMN question_sources_json TEXT");
+} catch {
+  // column already exists
+}
+
 export default db;

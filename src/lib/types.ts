@@ -3,6 +3,7 @@ export type Kid = {
   name: string;
   grade_level: string;
   avatar_color: string;
+  avatar_emoji: string;
   created_at: string;
 };
 
@@ -31,12 +32,28 @@ export type QuestionBank = {
   created_at: string;
 };
 
+export type QuizSource = { bankId: number; idx: number };
+
 export type Quiz = {
   id: number;
   kid_id: number;
   question_bank_id: number;
   questionIndices: number[];
+  questionSources: QuizSource[] | null;
   created_at: string;
+};
+
+export type BankOption = {
+  bankId: number;
+  bankLabel: string;
+  materialId: number;
+  materialTitle: string;
+  questionCount: number;
+};
+
+export type SubjectGroup = {
+  subject: string;
+  banks: BankOption[];
 };
 
 export type Attempt = {

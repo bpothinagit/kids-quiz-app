@@ -1,5 +1,5 @@
 import db from "./db";
-import type { Attempt, Kid, Material, Question, QuestionBank, Quiz } from "./types";
+import type { Attempt, Kid, Material, Question, QuestionBank, Quiz, QuizSource, SubjectGroup } from "./types";
 
 // ---- kids ----
 
@@ -11,18 +11,19 @@ export function getKid(id: number): Kid | undefined {
   return db.prepare("SELECT * FROM kids WHERE id = ?").get(id) as Kid | undefined;
 }
 
-export function createKid(input: { name: string; grade_level: string; avatar_color: string }): Kid {
+export function createKid(input: { name: string; grade_level: string; avatar_color: string; avatar_emoji: string }): Kid {
   const result = db
-    .prepare("INSERT INTO kids (name, grade_level, avatar_color) VALUES (?, ?, ?)")
-    .run(input.name, input.grade_level, input.avatar_color);
+    .prepare("INSERT INTO kids (name, grade_level, avatar_color, avatar_emoji) VALUES (?, ?, ?, ?)")
+    .run(input.name, input.grade_level, input.avatar_color, input.avatar_emoji);
   return getKid(Number(result.lastInsertRowid))!;
 }
 
-export function updateKid(id: number, input: { name: string; grade_level: string; avatar_color: string }): Kid | undefined {
-  db.prepare("UPDATE kids SET name = ?, grade_level = ?, avatar_color = ? WHERE id = ?").run(
+export function updateKid(id: number, input: { name: string; grade_level: string; avatar_color: string; avatar_emoji: string }): Kid | undefined {
+  db.prepare("UPDATE kids SET name = ?, grade_level = ?, avatar_color = ?, avatar_emoji = ? WHERE id = ?").run(
     input.name,
     input.grade_level,
     input.avatar_color,
+    input.avatar_emoji,
     id,
   );
   return getKid(id);
@@ -116,6 +117,7 @@ type QuizRow = {
   kid_id: number;
   question_bank_id: number;
   question_indices_json: string;
+  question_sources_json: string | null;
   created_at: string;
 };
 
@@ -125,6 +127,7 @@ function rowToQuiz(row: QuizRow): Quiz {
     kid_id: row.kid_id,
     question_bank_id: row.question_bank_id,
     questionIndices: JSON.parse(row.question_indices_json) as number[],
+    questionSources: row.question_sources_json ? (JSON.parse(row.question_sources_json) as QuizSource[]) : null,
     created_at: row.created_at,
   };
 }
@@ -134,11 +137,44 @@ export function getQuiz(id: number): Quiz | undefined {
   return row ? rowToQuiz(row) : undefined;
 }
 
-export function createQuiz(input: { kid_id: number; question_bank_id: number; questionIndices: number[] }): Quiz {
+export function createQuiz(input: {
+  kid_id: number;
+  question_bank_id: number;
+  questionIndices?: number[];
+  questionSources?: QuizSource[];
+}): Quiz {
+  if (!input.questionIndices && !input.questionSources) {
+    throw new Error("createQuiz requires either questionIndices or questionSources");
+  }
+  const indicesJson = JSON.stringify(input.questionIndices ?? []);
+  const sourcesJson = input.questionSources ? JSON.stringify(input.questionSources) : null;
   const result = db
-    .prepare("INSERT INTO quizzes (kid_id, question_bank_id, question_indices_json) VALUES (?, ?, ?)")
-    .run(input.kid_id, input.question_bank_id, JSON.stringify(input.questionIndices));
+    .prepare(
+      "INSERT INTO quizzes (kid_id, question_bank_id, question_indices_json, question_sources_json) VALUES (?, ?, ?, ?)",
+    )
+    .run(input.kid_id, input.question_bank_id, indicesJson, sourcesJson);
   return getQuiz(Number(result.lastInsertRowid))!;
+}
+
+export function listBanksGroupedBySubject(kidId: number): SubjectGroup[] {
+  const materials = listMaterials(kidId);
+  const groupMap = new Map<string, SubjectGroup>();
+  for (const material of materials) {
+    const banks = listQuestionBanksForMaterial(material.id);
+    for (const bank of banks) {
+      if (!groupMap.has(material.subject)) {
+        groupMap.set(material.subject, { subject: material.subject, banks: [] });
+      }
+      groupMap.get(material.subject)!.banks.push({
+        bankId: bank.id,
+        bankLabel: bank.label,
+        materialId: material.id,
+        materialTitle: material.title,
+        questionCount: bank.questions.length,
+      });
+    }
+  }
+  return Array.from(groupMap.values());
 }
 
 // ---- attempts ----
