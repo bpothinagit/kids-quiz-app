@@ -75,7 +75,7 @@ export default function MaterialUploader({ kids, materials }: { kids: Kid[]; mat
               <Link href={`/parent/materials/${material.id}`} className="font-medium text-indigo-700 hover:underline">
                 {material.title}
               </Link>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-slate-600">
                 {material.subject}
                 {material.kid_id ? ` · for ${kids.find((k) => k.id === material.kid_id)?.name ?? "a kid"}` : " · shared with everyone"}
               </p>
@@ -85,7 +85,7 @@ export default function MaterialUploader({ kids, materials }: { kids: Kid[]; mat
             </button>
           </li>
         ))}
-        {materials.length === 0 && <li className="text-sm text-slate-500">No materials uploaded yet.</li>}
+        {materials.length === 0 && <li className="text-sm text-slate-600">No materials uploaded yet.</li>}
       </ul>
 
       <form onSubmit={handleSubmit} className="space-y-3 rounded-xl bg-white p-4 ring-1 ring-slate-200">
@@ -132,7 +132,7 @@ export default function MaterialUploader({ kids, materials }: { kids: Kid[]; mat
         >
           Upload
         </button>
-        <p className="text-xs text-slate-400">Supported: .txt, .md, .docx, .pdf</p>
+        <p className="text-sm text-slate-600">Supported: .txt, .md, .docx, .pdf</p>
       </form>
     </div>
   );

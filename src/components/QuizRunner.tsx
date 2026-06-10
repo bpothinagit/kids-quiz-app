@@ -72,7 +72,7 @@ export default function QuizRunner({
     return (
       <div className="mx-auto max-w-2xl space-y-6 px-6 py-12">
         <div className="rounded-2xl bg-white p-6 text-center ring-1 ring-slate-200">
-          <p className="text-sm text-slate-500">{subject} · {materialTitle}</p>
+          <p className="text-sm text-slate-600">{subject} · {materialTitle}</p>
           <p className="mt-2 text-4xl font-bold text-indigo-600">
             {results.score} / {results.total}
           </p>
@@ -109,7 +109,7 @@ export default function QuizRunner({
           <Link href={`/practice/${kidId}`} className="rounded-full bg-indigo-600 px-6 py-2 text-sm font-medium text-white hover:bg-indigo-700">
             Practice again
           </Link>
-          <Link href={`/progress/${kidId}`} className="rounded-full px-6 py-2 text-sm text-slate-500 hover:text-slate-700 underline">
+          <Link href={`/progress/${kidId}`} className="rounded-full px-6 py-2 text-sm text-slate-600 hover:text-slate-700 underline">
             View my progress
           </Link>
         </div>
@@ -119,7 +119,7 @@ export default function QuizRunner({
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 px-6 py-12">
-      <div className="flex items-center justify-between text-sm text-slate-500">
+      <div className="flex items-center justify-between text-sm text-slate-600">
         <span>{subject} · {materialTitle}</span>
         <span>Question {index + 1} of {questions.length}</span>
       </div>

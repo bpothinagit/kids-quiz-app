@@ -50,8 +50,7 @@ export default function QuestionBankImporter({
     }
   }
 
-  async function handleImport(e: React.FormEvent) {
-    e.preventDefault();
+  async function handleImport() {
     if (!pasted.trim()) {
       setError("Paste the JSON reply from your chat first.");
       return;
@@ -81,7 +80,7 @@ export default function QuestionBankImporter({
     <div className="space-y-6">
       <div className="space-y-3 rounded-xl bg-white p-4 ring-1 ring-slate-200">
         <h3 className="font-medium">Step 1 — Generate a prompt</h3>
-        <p className="text-sm text-slate-500">
+        <p className="text-base text-slate-600">
           Configure a couple of details, then copy the prompt into your favorite AI chat (Claude.ai,
           ChatGPT, Gemini, etc.).
         </p>
@@ -131,9 +130,9 @@ export default function QuestionBankImporter({
         )}
       </div>
 
-      <form onSubmit={handleImport} className="space-y-3 rounded-xl bg-white p-4 ring-1 ring-slate-200">
+      <form onSubmit={(e) => { e.preventDefault(); handleImport(); }} className="space-y-3 rounded-xl bg-white p-4 ring-1 ring-slate-200">
         <h3 className="font-medium">Step 2 — Paste the reply back</h3>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-600">
           Copy the JSON the chat gave you and paste it here. We&apos;ll check it&apos;s well-formed and save it
           as a reusable question bank.
         </p>
@@ -155,20 +154,24 @@ export default function QuestionBankImporter({
         </button>
       </form>
 
-      <div className="space-y-2">
-        <h3 className="font-medium">Saved question banks</h3>
-        {questionBanks.length === 0 ? (
-          <p className="text-sm text-slate-500">None yet — generate one above to start practicing this material.</p>
-        ) : (
-          <ul className="space-y-2">
-            {questionBanks.map((bank) => (
-              <li key={bank.id} className="rounded-xl bg-white px-4 py-3 ring-1 ring-slate-200">
-                <p className="font-medium">{bank.label}</p>
-                <p className="text-sm text-slate-500">{bank.questions.length} questions</p>
-              </li>
-            ))}
-          </ul>
-        )}
+      <div className="-mx-5 -mb-5 rounded-b-xl border-t border-slate-200 bg-white overflow-hidden">
+        <div className="bg-slate-50 px-5 py-3 border-b border-slate-200">
+          <h3 className="font-semibold text-base">Saved question banks</h3>
+        </div>
+        <div className="p-5">
+          {questionBanks.length === 0 ? (
+            <p className="text-sm text-slate-600">None yet — generate one above to start practicing this material.</p>
+          ) : (
+            <ul className="space-y-2">
+              {questionBanks.map((bank) => (
+                <li key={bank.id} className="rounded-xl bg-slate-50 px-4 py-3 ring-1 ring-slate-200">
+                  <p className="font-medium">{bank.label}</p>
+                  <p className="text-sm text-slate-600">{bank.questions.length} questions</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </div>
   );

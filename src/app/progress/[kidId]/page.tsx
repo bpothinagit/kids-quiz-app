@@ -24,7 +24,7 @@ export default async function ProgressPage({ params }: { params: Promise<{ kidId
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">{kid.name}&apos;s progress</h1>
-            {kid.grade_level && <p className="text-sm text-slate-500">{kid.grade_level}</p>}
+            {kid.grade_level && <p className="text-sm text-slate-600">{kid.grade_level}</p>}
           </div>
           <Link href={`/practice/${kid.id}`} className="text-sm text-indigo-600 hover:underline">
             ← Back to practice
@@ -32,7 +32,7 @@ export default async function ProgressPage({ params }: { params: Promise<{ kidId
         </div>
 
         {attempts.length === 0 ? (
-          <p className="rounded-xl bg-white p-4 text-sm text-slate-500 ring-1 ring-slate-200">
+          <p className="rounded-xl bg-amber-50 p-4 text-sm font-medium text-amber-700 ring-1 ring-amber-200">
             No quizzes taken yet — finish a practice quiz to start tracking progress here.
           </p>
         ) : (
@@ -46,7 +46,7 @@ export default async function ProgressPage({ params }: { params: Promise<{ kidId
                     <div key={subject} className="rounded-xl bg-white p-4 ring-1 ring-slate-200">
                       <p className="font-medium">{subject}</p>
                       <p className="text-2xl font-bold text-indigo-600">{pct}%</p>
-                      <p className="text-xs text-slate-400">
+                      <p className="text-sm text-slate-600">
                         {stats.correct} / {stats.total} correct across {stats.attempts} quiz{stats.attempts === 1 ? "" : "zes"}
                       </p>
                     </div>
@@ -64,11 +64,11 @@ export default async function ProgressPage({ params }: { params: Promise<{ kidId
                     <li key={a.id} className="flex items-center justify-between rounded-xl bg-white px-4 py-3 ring-1 ring-slate-200">
                       <div>
                         <p className="font-medium">{a.subject} · {a.materialTitle}</p>
-                        <p className="text-xs text-slate-400">{formatDate(a.completed_at)}</p>
+                        <p className="text-sm text-slate-600">{formatDate(a.completed_at)}</p>
                       </div>
                       <div className="text-right">
                         <p className="font-semibold">{a.score} / {a.total}</p>
-                        <p className="text-xs text-slate-400">{pct}%</p>
+                        <p className="text-sm text-slate-600">{pct}%</p>
                       </div>
                     </li>
                   );

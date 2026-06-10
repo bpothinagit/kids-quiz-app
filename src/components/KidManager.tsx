@@ -4,13 +4,45 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { Kid } from "@/lib/types";
 
-const COLORS = ["#6366f1", "#ec4899", "#f59e0b", "#10b981", "#06b6d4", "#8b5cf6"];
+export const AVATARS = [
+  { emoji: "🦊", color: "#f97316" },
+  { emoji: "🐼", color: "#64748b" },
+  { emoji: "🦄", color: "#a855f7" },
+  { emoji: "🐸", color: "#22c55e" },
+  { emoji: "🦁", color: "#f59e0b" },
+  { emoji: "🐧", color: "#3b82f6" },
+  { emoji: "🦋", color: "#ec4899" },
+  { emoji: "🐉", color: "#6366f1" },
+  { emoji: "🦝", color: "#14b8a6" },
+  { emoji: "🐯", color: "#eab308" },
+  { emoji: "🦕", color: "#84cc16" },
+  { emoji: "🐨", color: "#8b5cf6" },
+];
+
+const DEFAULT_AVATAR = AVATARS[0];
+
+function getAvatar(emoji: string) {
+  return AVATARS.find((a) => a.emoji === emoji) ?? DEFAULT_AVATAR;
+}
+
+export function KidAvatar({ kid, size = "md" }: { kid: Kid; size?: "sm" | "md" | "lg" }) {
+  const avatar = getAvatar(kid.avatar_emoji);
+  const sizeClass = size === "sm" ? "h-10 w-10 text-xl" : size === "lg" ? "h-20 w-20 text-4xl" : "h-12 w-12 text-2xl";
+  return (
+    <span
+      className={`flex items-center justify-center rounded-full ${sizeClass} shadow-sm`}
+      style={{ backgroundColor: avatar.color + "33", border: `2.5px solid ${avatar.color}` }}
+    >
+      {avatar.emoji}
+    </span>
+  );
+}
 
 export default function KidManager({ kids }: { kids: Kid[] }) {
   const router = useRouter();
   const [name, setName] = useState("");
   const [gradeLevel, setGradeLevel] = useState("");
-  const [color, setColor] = useState(COLORS[0]);
+  const [avatarEmoji, setAvatarEmoji] = useState(DEFAULT_AVATAR.emoji);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -19,7 +51,7 @@ export default function KidManager({ kids }: { kids: Kid[] }) {
     setEditingId(kid.id);
     setName(kid.name);
     setGradeLevel(kid.grade_level);
-    setColor(kid.avatar_color);
+    setAvatarEmoji(kid.avatar_emoji || DEFAULT_AVATAR.emoji);
     setError(null);
   }
 
@@ -27,25 +59,30 @@ export default function KidManager({ kids }: { kids: Kid[] }) {
     setEditingId(null);
     setName("");
     setGradeLevel("");
-    setColor(COLORS[0]);
+    setAvatarEmoji(DEFAULT_AVATAR.emoji);
     setError(null);
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function handleSubmit() {
     if (!name.trim()) {
       setError("Please enter a name.");
       return;
     }
     setBusy(true);
     setError(null);
+    const selected = getAvatar(avatarEmoji);
     try {
       const url = editingId ? `/api/kids/${editingId}` : "/api/kids";
       const method = editingId ? "PATCH" : "POST";
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: name.trim(), grade_level: gradeLevel.trim(), avatar_color: color }),
+        body: JSON.stringify({
+          name: name.trim(),
+          grade_level: gradeLevel.trim(),
+          avatar_color: selected.color,
+          avatar_emoji: selected.emoji,
+        }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -84,15 +121,10 @@ export default function KidManager({ kids }: { kids: Kid[] }) {
             className="flex items-center justify-between gap-3 rounded-xl bg-white px-4 py-3 ring-1 ring-slate-200"
           >
             <div className="flex items-center gap-3">
-              <span
-                className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold text-white"
-                style={{ backgroundColor: kid.avatar_color }}
-              >
-                {kid.name.slice(0, 1).toUpperCase()}
-              </span>
+              <KidAvatar kid={kid} size="sm" />
               <div>
                 <p className="font-medium">{kid.name}</p>
-                {kid.grade_level && <p className="text-sm text-slate-500">{kid.grade_level}</p>}
+                {kid.grade_level && <p className="text-sm text-slate-600">{kid.grade_level}</p>}
               </div>
             </div>
             <div className="flex gap-2 text-sm">
@@ -105,10 +137,10 @@ export default function KidManager({ kids }: { kids: Kid[] }) {
             </div>
           </li>
         ))}
-        {kids.length === 0 && <li className="text-sm text-slate-500">No kid profiles yet — add one below.</li>}
+        {kids.length === 0 && <li className="text-sm text-slate-600">No kid profiles yet — add one below.</li>}
       </ul>
 
-      <form onSubmit={handleSubmit} className="space-y-3 rounded-xl bg-white p-4 ring-1 ring-slate-200">
+      <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className="space-y-4 rounded-xl bg-white p-4 ring-1 ring-slate-200">
         <h3 className="font-medium">{editingId ? "Edit profile" : "Add a kid profile"}</h3>
         <div className="flex flex-wrap gap-3">
           <input
@@ -126,19 +158,34 @@ export default function KidManager({ kids }: { kids: Kid[] }) {
             className="flex-1 min-w-[10rem] rounded-lg border border-slate-300 px-3 py-2 text-sm"
           />
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-slate-500">Color:</span>
-          {COLORS.map((c) => (
-            <button
-              key={c}
-              type="button"
-              onClick={() => setColor(c)}
-              className={`h-7 w-7 rounded-full ring-2 ${color === c ? "ring-slate-900" : "ring-transparent"}`}
-              style={{ backgroundColor: c }}
-              aria-label={`Choose color ${c}`}
-            />
-          ))}
+
+        <div className="space-y-1.5">
+          <span className="text-sm text-slate-600">Pick an avatar:</span>
+          <div className="flex flex-wrap gap-2">
+            {AVATARS.map((a) => {
+              const selected = avatarEmoji === a.emoji;
+              return (
+                <button
+                  key={a.emoji}
+                  type="button"
+                  onClick={() => setAvatarEmoji(a.emoji)}
+                  title={a.emoji}
+                  className={`flex h-11 w-11 items-center justify-center rounded-full text-2xl transition-transform hover:scale-110 ${
+                    selected ? "ring-4 ring-offset-1 scale-110" : "ring-2 ring-transparent"
+                  }`}
+                  style={{
+                    backgroundColor: a.color + "33",
+                    border: `2.5px solid ${a.color}`,
+                    ...(selected ? { outline: `3px solid ${a.color}`, outlineOffset: "2px" } : {}),
+                  }}
+                >
+                  {a.emoji}
+                </button>
+              );
+            })}
+          </div>
         </div>
+
         {error && <p className="text-sm text-red-600">{error}</p>}
         <div className="flex gap-2">
           <button
@@ -149,7 +196,7 @@ export default function KidManager({ kids }: { kids: Kid[] }) {
             {editingId ? "Save changes" : "Add profile"}
           </button>
           {editingId && (
-            <button type="button" onClick={resetForm} className="rounded-full px-5 py-2 text-sm text-slate-500 hover:text-slate-700">
+            <button type="button" onClick={resetForm} className="rounded-full px-5 py-2 text-sm text-slate-600 hover:text-slate-700">
               Cancel
             </button>
           )}

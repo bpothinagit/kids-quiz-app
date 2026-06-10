@@ -16,8 +16,9 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
   }
   const grade_level = typeof body.grade_level === "string" ? body.grade_level.trim() : "";
   const avatar_color = typeof body.avatar_color === "string" && body.avatar_color ? body.avatar_color : existing.avatar_color;
+  const avatar_emoji = typeof body.avatar_emoji === "string" && body.avatar_emoji ? body.avatar_emoji : existing.avatar_emoji;
 
-  const kid = updateKid(kidId, { name, grade_level, avatar_color });
+  const kid = updateKid(kidId, { name, grade_level, avatar_color, avatar_emoji });
   return NextResponse.json({ kid });
 }
 

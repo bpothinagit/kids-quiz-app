@@ -17,18 +17,26 @@ export default function ParentDashboard() {
           </Link>
         </div>
 
-        <section className="space-y-3">
-          <h2 className="text-lg font-semibold">Kid profiles</h2>
-          <KidManager kids={kids} />
+        <section className="rounded-xl border border-slate-200 bg-white overflow-hidden">
+          <div className="bg-slate-50 px-5 py-3 border-b border-slate-200">
+            <h2 className="text-lg font-semibold">Kid profiles</h2>
+          </div>
+          <div className="p-5">
+            <KidManager kids={kids} />
+          </div>
         </section>
 
-        <section className="space-y-3">
-          <h2 className="text-lg font-semibold">Study materials</h2>
-          <p className="text-sm text-slate-500">
-            Upload curriculum text, Word docs, or PDFs, tag them with a subject, then generate practice
-            questions from them.
-          </p>
-          <MaterialUploader kids={kids} materials={materials} />
+        <section className="rounded-xl border border-slate-200 bg-white overflow-hidden">
+          <div className="bg-slate-50 px-5 py-3 border-b border-slate-200">
+            <h2 className="text-lg font-semibold">Study materials</h2>
+            <p className="text-sm text-slate-600 mt-0.5">
+              Upload curriculum text, Word docs, or PDFs, tag them with a subject, then generate practice
+              questions from them.
+            </p>
+          </div>
+          <div className="p-5">
+            <MaterialUploader kids={kids} materials={materials} />
+          </div>
         </section>
       </div>
     </main>

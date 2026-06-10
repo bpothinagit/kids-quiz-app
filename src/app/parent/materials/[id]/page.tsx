@@ -19,17 +19,25 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
             ← Back to parent dashboard
           </Link>
           <h1 className="mt-2 text-2xl font-bold">{material.title}</h1>
-          <p className="text-sm text-slate-500">Subject: {material.subject}</p>
+          <p className="text-sm text-slate-600">Subject: {material.subject}</p>
         </div>
 
-        <section className="space-y-2">
-          <h2 className="text-lg font-semibold">Extracted text</h2>
-          <p className="whitespace-pre-wrap rounded-xl bg-white p-4 text-sm text-slate-600 ring-1 ring-slate-200">{preview}</p>
+        <section className="rounded-xl border border-slate-200 bg-white overflow-hidden">
+          <div className="bg-slate-50 px-5 py-3 border-b border-slate-200">
+            <h2 className="text-lg font-semibold">Extracted text</h2>
+          </div>
+          <div className="p-5">
+            <p className="whitespace-pre-wrap text-sm text-slate-600">{preview}</p>
+          </div>
         </section>
 
-        <section className="space-y-3">
-          <h2 className="text-lg font-semibold">Generate practice questions</h2>
-          <QuestionBankImporter materialId={material.id} questionBanks={questionBanks} />
+        <section className="rounded-xl border border-slate-200 bg-white overflow-hidden">
+          <div className="bg-slate-50 px-5 py-3 border-b border-slate-200">
+            <h2 className="text-lg font-semibold">Generate practice questions</h2>
+          </div>
+          <div className="p-5">
+            <QuestionBankImporter materialId={material.id} questionBanks={questionBanks} />
+          </div>
         </section>
       </div>
     </main>

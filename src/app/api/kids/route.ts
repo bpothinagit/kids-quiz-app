@@ -13,7 +13,8 @@ export async function POST(request: NextRequest) {
   }
   const grade_level = typeof body.grade_level === "string" ? body.grade_level.trim() : "";
   const avatar_color = typeof body.avatar_color === "string" && body.avatar_color ? body.avatar_color : "#6366f1";
+  const avatar_emoji = typeof body.avatar_emoji === "string" && body.avatar_emoji ? body.avatar_emoji : "🦊";
 
-  const kid = createKid({ name, grade_level, avatar_color });
+  const kid = createKid({ name, grade_level, avatar_color, avatar_emoji });
   return NextResponse.json({ kid }, { status: 201 });
 }

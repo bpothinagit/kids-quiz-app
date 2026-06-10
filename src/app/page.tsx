@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { listKids } from "@/lib/queries";
+import { KidAvatar } from "@/components/KidManager";
 
 export default function HomePage() {
   const kids = listKids();
@@ -8,12 +9,12 @@ export default function HomePage() {
     <main className="flex-1 flex flex-col items-center justify-center px-6 py-16 gap-10">
       <div className="text-center space-y-2">
         <h1 className="text-4xl font-bold">Who&apos;s practicing today?</h1>
-        <p className="text-slate-500">Pick your name to start a quiz, or check your progress.</p>
+        <p className="text-slate-600">Pick your name to start a quiz, or check your progress.</p>
       </div>
 
       {kids.length === 0 ? (
         <div className="text-center space-y-3">
-          <p className="text-slate-500">No kid profiles yet.</p>
+          <p className="text-slate-600">No kid profiles yet.</p>
           <Link
             href="/parent"
             className="inline-block rounded-full bg-indigo-600 px-6 py-3 text-white font-medium hover:bg-indigo-700"
@@ -29,31 +30,17 @@ export default function HomePage() {
               href={`/practice/${kid.id}`}
               className="group flex flex-col items-center gap-3 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 hover:shadow-md hover:ring-indigo-300 transition w-40"
             >
-              <span
-                className="flex h-20 w-20 items-center justify-center rounded-full text-2xl font-bold text-white"
-                style={{ backgroundColor: kid.avatar_color }}
-              >
-                {initials(kid.name)}
-              </span>
+              <KidAvatar kid={kid} size="lg" />
               <span className="text-lg font-semibold">{kid.name}</span>
-              {kid.grade_level && <span className="text-sm text-slate-500">{kid.grade_level}</span>}
+              {kid.grade_level && <span className="text-sm text-slate-600">{kid.grade_level}</span>}
             </Link>
           ))}
         </div>
       )}
 
-      <Link href="/parent" className="text-sm text-slate-400 hover:text-slate-600 underline">
+      <Link href="/parent" className="text-sm text-slate-600 hover:text-slate-600 underline">
         Parent dashboard
       </Link>
     </main>
   );
-}
-
-function initials(name: string): string {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join("");
 }
