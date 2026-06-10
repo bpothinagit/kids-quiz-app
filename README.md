@@ -34,7 +34,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 1. **Parent dashboard** (`/parent`) — upload a curriculum file and tag it with a subject
 2. **Material page** (`/parent/materials/[id]`) — click "Generate prompt", copy it, paste into any LLM chat, paste the JSON response back
-3. **Home** (`/`) — create a kid profile
+3. **Home** (`/home`) — create a kid profile
 4. **Practice** (`/practice/[kidId]`) — select a subject, check off one or more materials, set question count, start
 5. **Progress** (`/progress/[kidId]`) — view attempt history and scores
 
@@ -90,7 +90,7 @@ When a kid starts a quiz, materials are grouped by **subject**. The kid selects 
 
 | Route | Audience | Purpose |
 |---|---|---|
-| `/` | Both | Kid profile picker / home |
+| `/home` | Both | Kid profile picker / home (root `/` redirects here) |
 | `/parent` | Parent | Upload materials, manage question banks |
 | `/parent/materials/[id]` | Parent | Generate prompt, paste JSON, view banks |
 | `/practice/[kidId]` | Kid | Choose subject + materials, start a quiz |

@@ -25,7 +25,7 @@ export default async function PracticePage({ params }: { params: Promise<{ kidId
 
         <PracticePicker kidId={kid.id} subjectGroups={subjectGroups} />
 
-        <Link href="/" className="inline-block text-sm text-slate-600 hover:text-slate-600 underline">
+        <Link href="/home" className="inline-block text-sm text-slate-600 hover:text-slate-600 underline">
           ← Switch profile
         </Link>
       </div>

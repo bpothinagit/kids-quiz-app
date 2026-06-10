@@ -12,7 +12,7 @@ export default function ParentDashboard() {
       <div className="mx-auto max-w-3xl space-y-10">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Parent dashboard</h1>
-          <Link href="/" className="text-sm text-indigo-600 hover:underline">
+          <Link href="/home" className="text-sm text-indigo-600 hover:underline">
             ← Back to kid selector
           </Link>
         </div>
