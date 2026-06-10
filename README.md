@@ -2,7 +2,9 @@
 
 A practice-quiz app for kids, to serve their home tutoring and practice needs — built to run locally with **zero ongoing API costs**.
 
-A parent uploads curriculum materials (`.txt`, `.md`, `.docx`, `.pdf`), tags them by subject, and the app generates a ready-to-paste prompt for any LLM chat (Claude.ai, ChatGPT, Gemini, etc.). The JSON response — multiple-choice questions with explanations — is pasted back, validated, and stored as a reusable question bank. Kids pick a subject, choose which materials to include, take a sampled quiz, and see their score with explanations for every answer.
+- A parent uploads curriculum materials (`.txt`, `.md`, `.docx`, `.pdf`), tags them by subject, and the app generates a ready-to-paste prompt for any LLM chat (Claude.ai, ChatGPT, Gemini, etc.). 
+- The JSON response — multiple-choice questions with explanations — is pasted back, validated, and stored as a reusable question bank.
+- Kids pick a subject, choose which materials to include, take a sampled quiz, and see their score with explanations for every answer.
 
 ---
 
